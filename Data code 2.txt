@@ -1,0 +1,214 @@
+CREATE TABLE Supplier(
+Supplier_ID NUMBER(5) NOT NULL PRIMARY KEY,
+Supplier_name VARCHAR2(12),
+Contact_address VARCHAR2(25)
+);
+
+CREATE TABLE Product(
+Product_categories VARCHAR2(25) PRIMARY KEY,
+Product VARCHAR2(15)
+);
+
+
+CREATE TABLE Online_Store(
+Order_ID NUMBER(8) NOT NULL PRIMARY KEY, 
+Product_categories VARCHAR2(25),
+Product VARCHAR2(15) ,
+country VARCHAR2(20),
+city VARCHAR2(30),
+neighborhood VARCHAR2(20),
+delivery VARCHAR2(5),
+FOREIGN KEY (Product_categories) REFERENCES Product(Product_categories)
+);
+
+
+CREATE TABLE Employee(
+Order_ID NUMBER(8),
+Employee_ID NUMBER(5) NOT NULL PRIMARY KEY,
+Employee_Name VARCHAR2(20),
+salary NUMBER(6),
+FOREIGN KEY (Order_ID) REFERENCES Online_Store(Order_ID)
+);
+
+
+CREATE TABLE Game(
+Game_name VARCHAR2(20),
+Categories VARCHAR2(10),
+Developer_name VARCHAR2(25) NOT NULL,
+Release_date DATE,
+Order_ID NUMBER(8),
+Supplier_ID NUMBER(5),
+
+PRIMARY KEY (Game_name),
+FOREIGN KEY (Supplier_ID) REFERENCES Supplier(Supplier_ID),
+FOREIGN KEY (Order_ID) REFERENCES Online_Store (Order_ID)
+
+);
+
+
+
+CREATE TABLE Live_stream(
+Stream_ID NUMBER(8),
+Game_name VARCHAR2(20),
+points NUMBER(6),
+Stream_platform VARCHAR2(10),
+
+PRIMARY KEY(Stream_ID),
+FOREIGN KEY (Game_name) REFERENCES Game(Game_name)
+);
+
+
+CREATE TABLE player(
+User_name VARCHAR2(10),
+Stream_Id NUMBER(8),
+Age NUMBER(2),
+
+PRIMARY KEY(User_name),
+FOREIGN KEY (Stream_ID) REFERENCES Live_stream(Stream_ID)
+);
+
+
+CREATE TABLE Match(
+User_name VARCHAR2(10),
+Game_name VARCHAR2(20),
+Score NUMBER(5) NOT NULL,
+Match_date date ,
+
+PRIMARY KEY (User_name, Game_name),
+FOREIGN KEY (Game_name) REFERENCES Game (Game_name)
+
+);
+
+CREATE TABLE Skill_Level(
+User_Name Varchar2(10) NOT NULL ,
+Skill Varchar2(15) NOT NULL,
+PRIMARY KEY(User_Name, Skill)
+);
+
+
+CREATE TABLE Investor(
+Order_ID Number(8),
+Investor_ID Number(5) NOT NULL PRIMARY KEY , 
+User_Name  Varchar2(10),
+Investore_Name Varchar2(20),
+Investment_Type Varchar2(15),
+Invest_date date,
+
+FOREIGN KEY (Order_ID) REFERENCES Online_Store(Order_ID),
+FOREIGN KEY (User_Name) REFERENCES Player(User_Name)
+);
+
+
+
+CREATE TABLE Invested_Game(
+Game_name VARCHAR2(20),
+Investor_ID Number(5),
+
+PRIMARY KEY (Game_name,Investor_ID),
+FOREIGN KEY (Game_name) REFERENCES Game(Game_name),
+FOREIGN KEY (Investor_ID) REFERENCES Investor(Investor_ID)
+
+);
+
+
+INSERT INTO Supplier VALUES(18099,'Nintendo','Nintendo@gmail.com');
+INSERT INTO Supplier VALUES(20987,'Sony','Sony@gmail.com');
+INSERT INTO Supplier VALUES(21900,'Activision','Activision@mhotmail.com');
+INSERT INTO Supplier VALUES(19655,'Capcom','Capcom@gmail.com');
+INSERT INTO Supplier VALUES(22387,'Sega','Sega@mhotmail.com');
+SELECT * FROM Supplier;
+
+INSERT INTO Product VALUES('Gaming Accessories','controllers');
+INSERT INTO Product VALUES('PC','Monitors');
+INSERT INTO Product VALUES('Consoles & Hardware','Playstation 5');
+INSERT INTO Product VALUES('Video Games','Wii Sports');
+INSERT INTO Product VALUES('Electronics','cameras');
+SELECT * FROM Product;
+
+
+INSERT INTO Online_Store VALUES(1256,'Gaming Accessories','controllers','USA','New York City','Melrose','Yes');
+INSERT INTO Online_Store VALUES(1258,'PC','Monitors','USA','Arizona,Phoenix','Coronado','Yes');
+INSERT INTO Online_Store VALUES(1292,'Consoles & Hardware','Playstation 5','UK','Manchester','Bakersville',Null);
+INSERT INTO Online_Store VALUES(1267,'Video Games','Wii Sports','USA','California,Los Angeles','West Hollywood','Yes');
+INSERT INTO Online_Store VALUES(1288,'Electronics','cameras','UK','London','Whitehall',Null);
+
+
+INSERT INTO Employee VALUES(1256,22146,'Ahmed Hassan',4000 );
+INSERT INTO Employee VALUES(1258,23367,'Yazan Mohammed',2600);
+INSERT INTO Employee VALUES(1292,22755,'Abdullah Ali',3500);
+INSERT INTO Employee VALUES(1267,22890,'Mohammed Ahmed',3000);
+INSERT INTO Employee VALUES(1288,23700,'saad Ali',1500);
+
+
+INSERT INTO Game (Game_name, Categories, Developer_name, Release_date,  Order_ID, Supplier_ID)
+VALUES ('MyFarm', 'Fun', 'John and Smith', '03-Nov-2020',  1256, 20987);
+INSERT INTO Game (Game_name, Categories, Developer_name, Release_date,  Order_ID, Supplier_ID)
+VALUES ('Stitch', 'Action', 'MyGame company', '15-Apr-2021',  1258, 18099);
+INSERT INTO Game (Game_name, Categories, Developer_name, Release_date,  Order_ID, Supplier_ID) 
+VALUES ('Call of Duty', 'Action', 'Activision Publishing', '22-May-2019',  1292, 21900);
+INSERT INTO Game (Game_name, Categories, Developer_name, Release_date,  Order_ID, Supplier_ID) 
+VALUES ('Fun Run', 'Racing', 'Rogue Games', '30-Dec-2021',  1267, 19655);
+INSERT INTO Game (Game_name, Categories, Developer_name, Release_date, Order_ID, Supplier_ID) 
+VALUES ('Score Match', 'Sport', 'Rogue Games', '09-May-2020',  1288, 22387);
+
+
+INSERT INTO Live_stream (Stream_ID,Game_name,points,Stream_platform) VALUES(51111,'MyFarm',30,'Discord');
+INSERT INTO Live_stream (Stream_ID,Game_name,points,Stream_platform) VALUES(51112,'Stitch',40,'Tiktok');
+INSERT INTO Live_stream (Stream_ID,Game_name,points,Stream_platform) VALUES(51113,'Call of Duty',56,'Twitch');
+INSERT INTO Live_stream (Stream_ID,Game_name,points,Stream_platform) VALUES(51114,'Fun Run',3,'Discord');
+INSERT INTO Live_stream (Stream_ID,Game_name,points,Stream_platform) VALUES(51115,'Score Match',90,'Twitch');
+
+
+INSERT INTO player(User_name,Stream_ID,Age) VALUES ('John22',51111,20);
+INSERT INTO player(User_name,Stream_ID,Age) VALUES ('Sara_96',51112,17);
+INSERT INTO player(User_name,Stream_ID,Age) VALUES ('Sami2',51113,30);
+INSERT INTO player(User_name,Stream_ID,Age) VALUES ('Losi_Smith',51114,9);
+INSERT INTO player(User_name,Stream_ID,Age) VALUES ('Joseph5',51115,27);
+
+
+INSERT INTO Match (User_name, Game_name, Score, Match_date) VALUES ('John22', 'Call of Duty', 1025, '07-Feb-2022');
+INSERT INTO Match (User_name, Game_name, Score, Match_date) VALUES ('Sara_96', 'Call of Duty', 6330, '07-Feb-2022');
+INSERT INTO Match (User_name, Game_name, Score, Match_date) VALUES ('Sami2', 'Fun Run', 2989, '12-Mar-2022');
+INSERT INTO Match (User_name, Game_name, Score, Match_date) VALUES ('Losi_Smith', 'MyFarm', 90871, '29-Mar-2022');
+INSERT INTO Match (User_name, Game_name, Score, Match_date) VALUES ('Joseph5', 'Score Match', 22982, '14-Apr-2020');
+
+
+INSERT INTO Skill_Level VALUES('John22','Advanced');
+INSERT INTO Skill_Level VALUES('Sara_96','Beginner');
+INSERT INTO Skill_Level VALUES('Sami2','Intermediate');
+INSERT INTO Skill_Level VALUES('Losi_Smith','Intermediate');
+INSERT INTO Skill_Level VALUES('Joseph5','Advanced');
+
+
+INSERT INTO Investor VALUES(1256,23654,'John22','Ellen Roach','Shares','01-MAY-2021');
+INSERT INTO Investor VALUES(1258,23624,'Sara_96','Anton Morris','Fixed interest','4-MAY-2021');
+INSERT INTO Investor VALUES(1292,23668,'Sami2','Camren Braun','Cash','12-JUN-2021');
+INSERT INTO Investor VALUES(1267,24735,'Losi_Smith','Tony Brady','Cash','15-JUN-2021');
+INSERT INTO Investor VALUES(1288,24765,'Joseph5','Liam Oneal','Shares','19-JUN-2021');
+
+
+INSERT INTO Invested_Game(Game_name,Investor_ID) VALUES ('MyFarm',23654);
+INSERT INTO Invested_Game(Game_name,Investor_ID) VALUES ('Stitch',23624);
+INSERT INTO Invested_Game(Game_name,Investor_ID) VALUES ('Call of Duty',23668);
+INSERT INTO Invested_Game(Game_name,Investor_ID) VALUES ('Fun Run',24735);
+INSERT INTO Invested_Game(Game_name,Investor_ID) VALUES ('Score Match',24765);
+
+
+Select*from Employee order by salary DESC;
+
+SELECT Employee_ID, Employee_Name, salary
+FROM Employee
+WHERE salary = (SELECT MAX(salary) FROM Employee);
+
+
+SELECT player.User_name 
+FROM player , Investor 
+WHERE player.User_name = Investor.User_name
+AND player.User_name IN (SELECT DISTINCT Investor.User_name FROM Investor , Online_Store WHERE Investor.Order_ID = Online_Store.Order_ID);
+
+select User_name , Stream_ID 
+from player
+where Stream_ID= 51111
+group by User_name , Stream_ID ;
+
+select max(points) as Max_point,game_name from Live_stream group by game_name order by max(points) desc;
